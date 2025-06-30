@@ -1,0 +1,18 @@
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: member-management
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_general_ci
+      TZ: Asia/Seoul
+    ports:
+      - "3306:3306"
+    volumes:
+      - 'mysql:/var/lib/mysql'
+volumes:
+  mysql:

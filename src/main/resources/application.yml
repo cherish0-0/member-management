@@ -1,19 +1,21 @@
 spring:
+  autoconfigure:
+    # Disable the UserDetailsServiceAutoConfiguration to prevent Spring Boot from auto-configuring a default UserDetailsService
+    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/testdb
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/member-management
+    username: user
+    password: password
 
   jpa:
+    open-in-view: off
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     properties:
-        hibernate:
-            highlight_sql: true
-            show_sql: true
-
-jwt:
-  header: Authorization
-  secret: dGhpcyBpcyB0aGUgc2VjcmV0IGtleS4gSSdtIGRvaW5nIG1lbWJlci1tYW5hZ2VtZW50IHByb2plY3Qh
-  seconds-to-add: 360s
+      hibernate:
+        highlight_sql: true
+        show_sql: true

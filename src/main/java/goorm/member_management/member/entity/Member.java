@@ -10,6 +10,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,7 @@ public class Member {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column( unique = true, nullable = false)
+	@Column(unique = true, nullable = false)
 	private String email;
 
 	@Column(nullable = false)
@@ -37,7 +38,7 @@ public class Member {
 	@Column(nullable = false)
 	private RoleType role;
 
-	@Column(nullable = false, updatable = false)
+	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt;
 
 	public Member(String name, String email, String password, RoleType role) {
@@ -47,4 +48,44 @@ public class Member {
 		this.role = role;
 	}
 
+	@PrePersist
+	protected void onCreate() {
+		this.createdAt = LocalDateTime.now();
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public RoleType getRole() {
+		return role;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void updateName(String name) {
+		this.name = name;
+	}
+
+	public void updateEmail(String email) {
+		this.email = email;
+	}
+
+	public void updatePassword(String password) {
+		this.password = password;
+	}
 }

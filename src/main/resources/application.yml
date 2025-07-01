@@ -19,3 +19,5 @@ spring:
       hibernate:
         highlight_sql: true
         show_sql: true
+        use_sql_comments: true
+        format_sql: true

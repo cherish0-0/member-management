@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import goorm.member_management.member.dto.request.MemberCreateRequest;
-import goorm.member_management.member.entity.Member;
-import goorm.member_management.member.entity.RoleType;
-import goorm.member_management.member.repository.MemberRepository;
 import goorm.member_management.member.service.AuthService;
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
 	private final AuthService authService;
-
 
 	@PostMapping("/create")
 	public ResponseEntity<Void> createMember(@RequestBody MemberCreateRequest request) {

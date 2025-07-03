@@ -19,12 +19,12 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class AuthController {
 
-	private final MemberRepository memberRepository;
+	private final AuthService authService;
 
 
 	@PostMapping("/create")
 	public ResponseEntity<Void> createMember(@RequestBody MemberCreateRequest request) {
-		Member member = new Member(request.name(), request.email(), request.password(), RoleType.USER);
+		authService.createMember(request);
 
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}

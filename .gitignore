@@ -18,7 +18,17 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-.idea
+.idea/dataSources
+.idea/httpRequests
+.idea/shelf
+.idea/compiler.xml
+.idea/dataSources.xml
+.idea/gradle.xml
+.idea/misc.xml
+.idea/sqlDataSources.xml
+.idea/sqldialects.xml
+.idea/vcs.xml
+.idea/.gitignore
 *.iws
 *.iml
 *.ipr

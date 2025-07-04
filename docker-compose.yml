@@ -1,5 +1,7 @@
 services:
   mysql:
+    # 도커 데몬이 시작될 때마다 MySQL 컨테이너를 항상 실행
+    restart: always
     container_name: mysql
     image: mysql:latest
     environment:

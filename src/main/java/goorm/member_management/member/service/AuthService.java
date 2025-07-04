@@ -11,6 +11,7 @@ import goorm.member_management.member.entity.Member;
 import goorm.member_management.member.entity.RoleType;
 import goorm.member_management.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+
 @RequiredArgsConstructor
 @Service
 public class AuthService {
@@ -29,9 +30,9 @@ public class AuthService {
 		}
 
 		// 비밀번호 암호화
-		String encodedPassword = passwordEncoder.encode(request.password());
+		final String encodedPassword = passwordEncoder.encode(request.password());
 
-		Member member = new Member(request.name(), request.email(), encodedPassword, RoleType.USER);
+		final Member member = new Member(request.name(), request.email(), encodedPassword, RoleType.USER);
 
 		memberRepository.save(member);
 	}

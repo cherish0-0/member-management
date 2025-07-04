@@ -21,7 +21,6 @@ public class SecurityConfig {
 			.formLogin(AbstractHttpConfigurer::disable)
 			.headers(headers -> headers.frameOptions(FrameOptionsConfig::sameOrigin))
 			.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/**").permitAll()
 				.anyRequest().permitAll()
 			)
 			.build();

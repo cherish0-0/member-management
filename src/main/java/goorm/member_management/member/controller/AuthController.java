@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import goorm.member_management.member.dto.request.MemberCreateRequest;
 import goorm.member_management.member.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequestMapping("/account")
@@ -19,7 +20,7 @@ public class AuthController {
 	private final AuthService authService;
 
 	@PostMapping("/create")
-	public ResponseEntity<Void> createMember(@RequestBody MemberCreateRequest request) {
+	public ResponseEntity<Void> createMember(@Valid @RequestBody MemberCreateRequest request) {
 		authService.createMember(request);
 
 		return ResponseEntity.status(HttpStatus.CREATED).build();

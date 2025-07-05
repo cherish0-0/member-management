@@ -55,4 +55,11 @@ public class Member {
 		this.role = role;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public String getEmail() {
+		return email;
+	}
 }

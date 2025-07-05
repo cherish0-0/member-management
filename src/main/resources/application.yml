@@ -23,5 +23,6 @@ spring:
         format_sql: true
 
 jwt:
-  secretKey: ThisIsMyJwtSecretKeyThisOnlyForTestingPurposes
+  header: Authorization
+  secretKey: ThisIsMyJwtSecretKeyThisOnlyForTestingPurposesHowMuchLongerDoINeedToWriteAlmostThereIdontHaveAnythingMoreToSay
   expirationTime: 3600s # 1 hour in seconds

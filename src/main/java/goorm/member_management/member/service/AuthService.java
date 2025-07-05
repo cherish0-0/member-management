@@ -11,6 +11,8 @@ import goorm.member_management.member.dto.response.MemberLoginResponse;
 import goorm.member_management.member.entity.Member;
 import goorm.member_management.member.entity.RoleType;
 import goorm.member_management.member.repository.MemberRepository;
+import goorm.member_management.security.JwtProvider;
+import goorm.member_management.security.dto.TokenInfo;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ public class AuthService {
 
 	private final MemberRepository memberRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final JwtProvider jwtProvider;
 
 	public void createMember(MemberCreateRequest request) {
 
@@ -42,7 +45,9 @@ public class AuthService {
 
 		checkPassword(password, member);
 
-		return new MemberLoginResponse(member.getEmail());
+		final TokenInfo accessToken = jwtProvider.createAccessToken(email);
+
+		return new MemberLoginResponse(member.getEmail(), accessToken);
 	}
 
 	private Member findByEmail(String email) {

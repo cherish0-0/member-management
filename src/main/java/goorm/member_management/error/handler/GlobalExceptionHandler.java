@@ -17,47 +17,45 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-	@ExceptionHandler(CustomException.class)
-	public ResponseEntity<ErrorResponse> handleCustomException(CustomException ex) {
-		log.error("exceptionMessage: {}", ex.getMessage());
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ErrorResponse> handleCustomException(CustomException ex) {
+        log.error("exceptionMessage: {}", ex.getMessage());
 
-		final List<String> errors = new ArrayList<>();
+        final List<String> errors = new ArrayList<>();
 
-		errors.add(ex.getErrorCode().getMessage());
+        errors.add(ex.getErrorCode().getMessage());
 
-		return ResponseEntity
-			.status(ex.getErrorCode().getStatus())
-			.body(new ErrorResponse(errors));
-	}
+        return ResponseEntity
+            .status(ex.getErrorCode().getStatus())
+            .body(new ErrorResponse(errors));
+    }
 
-	// 회원 가입 DTO 유효성 검사 실패 시 발생하는 예외 처리
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    // 회원 가입 DTO 유효성 검사 실패 시 발생하는 예외 처리
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        final List<String> errors = new ArrayList<>();
 
-		final List<String> errors = new ArrayList<String>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            final String errorMessage = error.getDefaultMessage(); // DTO에 지정한 메시지
+            log.error("exceptionMessage: {}", errorMessage);
 
-		ex.getBindingResult().getAllErrors().forEach((error) -> {
-			final String errorMessage = error.getDefaultMessage(); // DTO에 지정한 메시지
-			log.error("exceptionMessage: {}", errorMessage);
+            errors.add(errorMessage);
+        });
 
-			errors.add(errorMessage);
-		});
+        final ErrorResponse response = new ErrorResponse(errors);
 
-		final ErrorResponse response = new ErrorResponse(
-			errors
-		);
+        return ResponseEntity
+            .badRequest()
+            .body(response);
+    }
 
-		return ResponseEntity
-			.badRequest()
-			.body(response);
-	}
+    // CustomException에서 지정하지 않은 모든 예외 : 서버 오류로 간주
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGenericException(Exception ex) {
+        log.error("Unhandled Exception: ", ex);
+        return ResponseEntity
+            .internalServerError()
+            .body(ErrorCode.INTERNAL_SERVER_ERROR.getMessage());
+    }
 
-	// CustomException에서 지정하지 않은 모든 예외 : 서버 오류로 간주
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<String> handleGenericException(Exception ex) {
-		log.error("Unhandled Exception: ", ex);
-		return ResponseEntity
-			.internalServerError()
-			.body(ErrorCode.INTERNAL_SERVER_ERROR.getMessage());
-	}
 }

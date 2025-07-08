@@ -8,12 +8,20 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+import goorm.member_management.error.dto.ErrorCode;
+import goorm.member_management.error.exception.CustomException;
 import goorm.member_management.security.dto.TokenInfo;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SecurityException;
 
 @Component
 public class JwtProvider {
@@ -56,6 +64,38 @@ public class JwtProvider {
 			.compact();
 
 		return new TokenInfo(token, expiration, email, tokenId);
+	}
+
+	public Claims validateToken(String token) {
+
+		if (!StringUtils.hasText(token)) {
+			throw new CustomException(ErrorCode.TOKEN_IS_EMPTY);
+		}
+
+		try {
+
+			parseToken(token);
+
+		} catch (ExpiredJwtException e) {
+			throw new CustomException(ErrorCode.TOKEN_EXPIRED);
+		} catch (SecurityException | MalformedJwtException e) {
+			throw new CustomException(ErrorCode.TOKEN_INVALID);
+		} catch (UnsupportedJwtException e) {
+			throw new CustomException(ErrorCode.TOKEN_HASH_NOT_SUPPORTED);
+		} catch (IllegalArgumentException e) {
+			throw new CustomException(ErrorCode.TOKEN_WRONG_SIGNATURE);
+		} catch (Exception e) {
+			throw new CustomException(ErrorCode.TOKEN_VALIDATION_TRY_FAILED);
+		}
+		return parseToken(token);
+	}
+
+	private Claims parseToken(String token) {
+		return Jwts.parserBuilder()
+			.setSigningKey(hashKey)
+			.build()
+			.parseClaimsJws(token)
+			.getBody();
 	}
 
 	public Key getHashKey() {

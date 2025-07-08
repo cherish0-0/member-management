@@ -23,6 +23,8 @@ public class AuthService {
 	private final PasswordEncoder passwordEncoder;
 	private final JwtProvider jwtProvider;
 
+	// 트랜잭션 동기화를 위해 @Transactional 어노테이션 추가
+	@Transactional
 	public void createMember(MemberCreateRequest request) {
 
 		// 이메일 중복 체크

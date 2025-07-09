@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import goorm.member_management.member.dto.MemberInfo;
-import goorm.member_management.member.dto.request.MemberCreateRequest;
-import goorm.member_management.member.dto.request.MemberLoginRequest;
-import goorm.member_management.member.dto.response.MemberLoginResponse;
+import goorm.member_management.member.dto.request.MemberSignInRequest;
+import goorm.member_management.member.dto.request.MemberSignUpRequest;
+import goorm.member_management.member.dto.response.MemberSignInResponse;
 import goorm.member_management.member.service.AuthService;
 import goorm.member_management.security.JwtProvider;
 import goorm.member_management.security.dto.RefreshTokenInfo;
@@ -23,7 +23,7 @@ import goorm.member_management.security.repository.TokenRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@RequestMapping("/account")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 @RestController
 public class AuthController {
@@ -32,15 +32,15 @@ public class AuthController {
     private final JwtProvider jwtProvider;
     private final TokenRepository tokenRepository;
 
-    @PostMapping("/create")
-    public ResponseEntity<Void> createMember(@Valid @RequestBody MemberCreateRequest request) {
-        authService.createMember(request);
+    @PostMapping("/sign-up")
+    public ResponseEntity<Void> signUp(@Valid @RequestBody MemberSignUpRequest request) {
+        authService.signUp(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<MemberLoginResponse> login(@Valid @RequestBody MemberLoginRequest request) {
-        final MemberInfo memberInfo = authService.loginMember(request.email(), request.password());
+    @PostMapping("/sign-in")
+    public ResponseEntity<MemberSignInResponse> signIn(@Valid @RequestBody MemberSignInRequest request) {
+        final MemberInfo memberInfo = authService.signIn(request.email(), request.password());
         final String accessToken = jwtProvider.createAccessToken(memberInfo.email(), memberInfo.role());
         final RefreshTokenInfo refreshTokenInfo = jwtProvider.createRefreshToken(memberInfo.email());
 
@@ -61,7 +61,7 @@ public class AuthController {
         return ResponseEntity
             .status(HttpStatus.OK)
             .header(HttpHeaders.SET_COOKIE, cookie.toString())
-            .body(new MemberLoginResponse(accessToken));
+            .body(new MemberSignInResponse(accessToken));
     }
 
 }

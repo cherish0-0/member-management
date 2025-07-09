@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import goorm.member_management.error.dto.ErrorCode;
 import goorm.member_management.error.exception.CustomException;
 import goorm.member_management.member.dto.MemberInfo;
-import goorm.member_management.member.dto.request.MemberCreateRequest;
+import goorm.member_management.member.dto.request.MemberSignUpRequest;
 import goorm.member_management.member.entity.Member;
 import goorm.member_management.member.entity.RoleType;
 import goorm.member_management.member.repository.MemberRepository;
@@ -21,7 +21,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void createMember(MemberCreateRequest request) {
+    public void signUp(MemberSignUpRequest request) {
         // 이메일 중복 체크
         if (memberRepository.existsByEmail(request.email())) {
             throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
@@ -34,7 +34,7 @@ public class AuthService {
     }
 
     @Transactional(readOnly = true)
-    public MemberInfo loginMember(String email, String password) {
+    public MemberInfo signIn(String email, String password) {
         final Member member = findByEmail(email);
         checkPassword(password, member.getPassword());
         return new MemberInfo(member.getEmail(), member.getRole());

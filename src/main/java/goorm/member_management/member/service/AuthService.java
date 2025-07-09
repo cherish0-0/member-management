@@ -1,5 +1,9 @@
 package goorm.member_management.member.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import goorm.member_management.error.dto.ErrorCode;
 import goorm.member_management.error.exception.CustomException;
 import goorm.member_management.member.dto.MemberInfo;
@@ -8,9 +12,6 @@ import goorm.member_management.member.entity.Member;
 import goorm.member_management.member.entity.RoleType;
 import goorm.member_management.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -41,11 +42,11 @@ public class AuthService {
 
     private Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL));
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EMAIL));
     }
 
     private void checkPassword(String rawPassword,
-                               String encodedPassword) {
+        String encodedPassword) {
         if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
             throw new CustomException(ErrorCode.NOT_MATCHES_PASSWORD);
         }

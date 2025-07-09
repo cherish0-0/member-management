@@ -23,5 +23,7 @@ spring:
         format_sql: true
 
 jwt:
-  secretKey: ThisIsMyJwtSecretKeyThisOnlyForTestingPurposesHowMuchLongerDoINeedToWriteAlmostThereIdontHaveAnythingMoreToSay
+  accessTokenSecretKey: VGhpc0lzTXlKd3RTZWNyZXRLZXlUaGlzT25seUZvclRlc3RpbmdQdXJwb3Nlc0hvd011Y2hMb25nZXJEb0lOZWVkVG9Xcml0ZUFsbW9zdFRoZXJlSWRvbnRIYXZlQW55dGhpbmdNb3JlVG9TYXk=
+  refreshTokenSecretKey: VGhpc0lzTXlSZWZyZXNoVG9rZW5TZWNyZXRLZXlUaGlzT25seUZvclRlc3RpbmdQdXJwb3Nlc0hvd011Y2hMb25nZXJEb0lOZWVkVG9Xcml0ZUFsbW9zdFRoZXJlSWRvbnRIYXZlQW55dGhpbmdNb3JlVG9TYXk=
   accessTokenExpiration: 1h # 1 hour in seconds
+  refreshTokenExpiration: 30d # 30 days in seconds

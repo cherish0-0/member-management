@@ -1,14 +1,22 @@
 package goorm.member_management.member.entity;
 
-import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import static jakarta.persistence.GenerationType.*;
 
 import java.time.LocalDateTime;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 // @EntityListeners를 사용하여 JPA Auditing 기능 적용
 @Table(name = "member")
@@ -35,12 +43,18 @@ public class Member {
     @Column(nullable = false)
     private RoleType role;
 
+    @Column(unique = true)
+    private String refreshToken;
+
     // @CreatedDate : JPA Auditing을 사용하여 생성일자를 자동으로 관리
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Member(String name, String email, String password, RoleType role) {
+    public Member(String name,
+        String email,
+        String password,
+        RoleType role) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -57,6 +71,10 @@ public class Member {
 
     public RoleType getRole() {
         return role;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
 }

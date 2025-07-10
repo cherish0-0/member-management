@@ -1,5 +1,6 @@
 package goorm.member_management.member.service;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,10 +11,10 @@ import goorm.member_management.member.dto.MemberInfo;
 import goorm.member_management.member.dto.Tokens;
 import goorm.member_management.member.dto.request.MemberSignUpRequest;
 import goorm.member_management.member.entity.Member;
+import goorm.member_management.member.entity.MemberDetails;
 import goorm.member_management.member.entity.RoleType;
 import goorm.member_management.member.repository.MemberRepository;
 import goorm.member_management.security.JwtProvider;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -60,11 +61,13 @@ public class AuthService {
      * refreshToken은 null로 설정하여 갱신 방지
      */
     @Transactional
-    public void signOut(String accessToken) {
-        String accessTokenWithoutBearer = accessToken.substring(7);
-        Claims claims = jwtProvider.validateToken(accessTokenWithoutBearer, false);
+    public void signOut(@AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails == null) {
+            throw new CustomException(ErrorCode.TOKEN_INVALID);
+        }
 
-        String email = claims.getAudience();
+        String email = memberDetails.getEmail();
+
         final Member member = memberRepository.findByEmail(email)
             .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         member.setRefreshToken(null);

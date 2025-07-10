@@ -8,10 +8,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +20,7 @@ import goorm.member_management.member.dto.Tokens;
 import goorm.member_management.member.dto.request.MemberSignInRequest;
 import goorm.member_management.member.dto.request.MemberSignUpRequest;
 import goorm.member_management.member.dto.response.MemberSignInResponse;
+import goorm.member_management.member.entity.MemberDetails;
 import goorm.member_management.member.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -50,8 +51,8 @@ public class AuthController {
     }
 
     @PostMapping("/sign-out")
-    public ResponseEntity<Void> signOut(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
-        authService.signOut(accessToken);
+    public ResponseEntity<Void> signOut(@AuthenticationPrincipal MemberDetails memberDetails) {
+        authService.signOut(memberDetails);
 
         return ResponseEntity
             .status(HttpStatus.OK)

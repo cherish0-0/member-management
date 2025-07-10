@@ -4,6 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import goorm.member_management.member.dto.request.MemberUpdateRequest;
 import goorm.member_management.member.dto.response.MemberResponse;
 import goorm.member_management.member.dto.response.PageResponse;
+import goorm.member_management.member.entity.MemberDetails;
 import goorm.member_management.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 
@@ -39,6 +41,17 @@ public class MemberController {
     public ResponseEntity<MemberResponse> updateMember(@PathVariable Long id,
         @RequestBody MemberUpdateRequest request) {
         MemberResponse memberResponse = memberService.updateMember(id, request);
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(memberResponse);
+    }
+
+    @PatchMapping("/me")
+    public ResponseEntity<MemberResponse> updateMember(
+        @AuthenticationPrincipal MemberDetails memberDetails,
+        @RequestBody MemberUpdateRequest request) {
+        MemberResponse memberResponse = memberService.updateMember(memberDetails.getId(), request);
 
         return ResponseEntity
             .status(HttpStatus.OK)

@@ -54,3 +54,13 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdWQiOiJ1c2VyQGdtYWlsLmNvbSIsImlhd
   "name": "updated user",
   "email": ""
 }
+
+###
+PATCH http://localhost:8080/api/members/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdWQiOiJ1c2VyQGdtYWlsLmNvbSIsImlhdCI6MTc1MjE2MDkzNywiZXhwIjoxNzUyMTY0NTM3LCJyb2xlIjoiVVNFUiIsImlkIjoyfQ.tZYHJrb-ijjFT3az5dnJyGMmkZV0ou2nt0P0R28raXx4SduZniEHgc0jhNW6-QqyxAokzFUCrGtu2pxXX7y3oQ
+
+{
+  "name": "user",
+  "email": "user@email.com"
+}

@@ -13,8 +13,8 @@ POST http://localhost:8080/auth/sign-in
 Content-Type: application/json
 
 {
-  "email": "email@email.com",
-  "password": "asdf1234!@#$"
+  "email": "user@gmail.com",
+  "password": "user1234!@#$"
 }
 
 ###
@@ -31,3 +31,6 @@ Content-Type: application/json
   "email": "admin@gmail.com",
   "password": "admin1234!@#$"
 }
+
+###
+GET http://localhost:8080/api/members?page=0&size=20

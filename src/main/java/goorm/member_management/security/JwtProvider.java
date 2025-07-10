@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 import goorm.member_management.error.dto.ErrorCode;
 import goorm.member_management.error.exception.CustomException;
+import goorm.member_management.member.dto.Tokens;
 import goorm.member_management.member.entity.RoleType;
-import goorm.member_management.security.dto.RefreshTokenInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -51,43 +51,24 @@ public class JwtProvider {
         this.refreshTokenExpiration = refreshTokenExpiration;
     }
 
-    /**
-     * JWT 토큰 생성
-     * - setSubject: 토큰 페이로드(속성)의 주체 설정
-     * - claim: 페이로드의 속성 설정 (키, 값 쌍으로 저장)
-     * - compact: JWT 토큰 문자열로 변환
-     */
-    public String createAccessToken(String email,
-        RoleType role) {
-        final Date issuedAt = Date.from(Instant.now());
-        final Date expiration = Date.from(issuedAt.toInstant().plus(accessTokenExpiration));
+    public Tokens createTokens(String email, RoleType role) {
+        Date issuedAt = Date.from(Instant.now());
+        Date accessTokenExpiration = Date.from(issuedAt.toInstant().plus(this.accessTokenExpiration));
+        Date refreshTokenExpiration = Date.from(issuedAt.toInstant().plus(this.refreshTokenExpiration));
 
-        return Jwts.builder()
-            .signWith(accessTokenHashKey, SignatureAlgorithm.HS512)
-            .setAudience(email)
-            .setIssuedAt(issuedAt)
-            .setExpiration(expiration)
-            .addClaims(Map.of("role", role.name()))
-            .compact();
+        final String accessToken = createToken(email, role, issuedAt,
+            accessTokenExpiration, this.accessTokenHashKey);
+        final String refreshToken = createToken(email, role, issuedAt,
+            refreshTokenExpiration, this.refreshTokenHashKey);
+
+        return new Tokens(accessToken, refreshToken);
     }
 
-    public RefreshTokenInfo createRefreshToken(String email) {
-        final Date issuedAt = Date.from(Instant.now());
-        final Date expiration = Date.from(issuedAt.toInstant().plus(refreshTokenExpiration));
+    public Claims validateToken(String token, boolean isRefreshToken) {
+        Key key = isRefreshToken ? refreshTokenHashKey : accessTokenHashKey;
 
-        String token = Jwts.builder()
-            .signWith(refreshTokenHashKey, SignatureAlgorithm.HS512)
-            .setAudience(email)
-            .setIssuedAt(issuedAt)
-            .setExpiration(expiration)
-            .compact();
-
-        return new RefreshTokenInfo(email, token, expiration);
-    }
-
-    public Claims validateToken(String token) {
         try {
-            return parseToken(token);
+            return parseToken(token, key);
         } catch (ExpiredJwtException e) {
             throw new CustomException(ErrorCode.TOKEN_EXPIRED);
         } catch (JwtException e) {
@@ -95,9 +76,23 @@ public class JwtProvider {
         }
     }
 
-    private Claims parseToken(String token) {
+    private String createToken(String email,
+        RoleType role,
+        Date issuedAt,
+        Date expiration,
+        Key key) {
+        return Jwts.builder()
+            .signWith(key, SignatureAlgorithm.HS512)
+            .setAudience(email)
+            .setIssuedAt(issuedAt)
+            .setExpiration(expiration)
+            .addClaims(Map.of("role", role.name()))
+            .compact();
+    }
+
+    private Claims parseToken(String token, Key key) {
         return Jwts.parserBuilder()
-            .setSigningKey(accessTokenHashKey)
+            .setSigningKey(key)
             .build()
             .parseClaimsJws(token)
             .getBody();

@@ -1,25 +1,25 @@
 package goorm.member_management.member.controller;
 
+import static goorm.member_management.security.JwtFilter.*;
+
 import java.time.Duration;
-import java.util.Date;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import goorm.member_management.member.dto.MemberInfo;
+import goorm.member_management.member.dto.Tokens;
 import goorm.member_management.member.dto.request.MemberSignInRequest;
 import goorm.member_management.member.dto.request.MemberSignUpRequest;
 import goorm.member_management.member.dto.response.MemberSignInResponse;
 import goorm.member_management.member.service.AuthService;
-import goorm.member_management.security.JwtProvider;
-import goorm.member_management.security.dto.RefreshTokenInfo;
-import goorm.member_management.security.repository.TokenRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -29,8 +29,6 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
     private final AuthService authService;
-    private final JwtProvider jwtProvider;
-    private final TokenRepository tokenRepository;
 
     @PostMapping("/sign-up")
     public ResponseEntity<Void> signUp(@Valid @RequestBody MemberSignUpRequest request) {
@@ -41,15 +39,29 @@ public class AuthController {
     @PostMapping("/sign-in")
     public ResponseEntity<MemberSignInResponse> signIn(@Valid @RequestBody MemberSignInRequest request) {
         final MemberInfo memberInfo = authService.signIn(request.email(), request.password());
-        final String accessToken = jwtProvider.createAccessToken(memberInfo.email(), memberInfo.role());
-        final RefreshTokenInfo refreshTokenInfo = jwtProvider.createRefreshToken(memberInfo.email());
+        final Tokens tokens = memberInfo.tokens();
+        ResponseCookie cookie = createRefreshTokenCookie(tokens.refreshToken());
 
-        final String refreshToken = refreshTokenInfo.getRefreshToken();
-        final Date expiration = refreshTokenInfo.getExpiration();
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .header(HttpHeaders.SET_COOKIE, cookie.toString())
+            .body(new MemberSignInResponse(tokens.accessToken()));
+    }
 
-        tokenRepository.save(new RefreshTokenInfo(request.email(), refreshToken, expiration));
+    @PostMapping("/refresh")
+    public ResponseEntity<Void> refreshToken(@CookieValue(name = "refreshToken") String refreshToken) {
+        final Tokens tokens = authService.refresh(refreshToken);
+        ResponseCookie cookie = createRefreshTokenCookie(tokens.refreshToken());
 
-        ResponseCookie cookie = ResponseCookie
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .header(HttpHeaders.AUTHORIZATION, BEARER + tokens.accessToken())
+            .header(HttpHeaders.SET_COOKIE, cookie.toString())
+            .build();
+    }
+
+    private ResponseCookie createRefreshTokenCookie(String refreshToken) {
+        return ResponseCookie
             .from("refreshToken", refreshToken)
             .sameSite("Lax")
             .secure(true)
@@ -57,11 +69,6 @@ public class AuthController {
             .path("/")
             .maxAge(Duration.ofDays(30))
             .build();
-
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .header(HttpHeaders.SET_COOKIE, cookie.toString())
-            .body(new MemberSignInResponse(accessToken));
     }
 
 }

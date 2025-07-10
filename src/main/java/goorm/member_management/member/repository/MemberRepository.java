@@ -1,14 +1,17 @@
 package goorm.member_management.member.repository;
 
-import goorm.member_management.member.entity.Member;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import goorm.member_management.member.entity.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByEmail(String email);
 
     Optional<Member> findByEmail(String email);
+
+    Optional<Member> findByRefreshToken(String refreshToken);
 
 }

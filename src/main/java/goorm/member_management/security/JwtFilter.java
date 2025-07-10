@@ -33,14 +33,14 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
         HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
-        final String token = resolveToken(request);
+        final String accessToken = resolveToken(request);
 
-        if (StringUtils.hasText(token)) {
+        if (StringUtils.hasText(accessToken)) {
             try {
-                final Claims validationResult = jwtProvider.validateToken(token);
-                handleValidToken(token, validationResult);
+                final Claims validationResult = jwtProvider.validateToken(accessToken, false);
+                handleValidToken(accessToken, validationResult);
             } catch (CustomException e) {
-                handleInvalidToken(token);
+                handleInvalidToken(accessToken);
             }
         }
 

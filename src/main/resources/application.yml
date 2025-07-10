@@ -1,3 +1,7 @@
+logging:
+  level:
+    org.hibernate.orm.jdbc.bind: trace
+
 spring:
   autoconfigure:
     # Disable the UserDetailsServiceAutoConfiguration to prevent Spring Boot from auto-configuring a default UserDetailsService

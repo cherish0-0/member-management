@@ -20,6 +20,7 @@ bin/
 ### IntelliJ IDEA ###
 .idea/dataSources
 .idea/httpRequests
+/.idea/inspectionProfiles/
 .idea/shelf
 .idea/compiler.xml
 .idea/dataSources.xml

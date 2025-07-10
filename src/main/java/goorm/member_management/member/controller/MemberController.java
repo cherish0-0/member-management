@@ -68,4 +68,12 @@ public class MemberController {
             .build();
     }
 
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> delete(@AuthenticationPrincipal MemberDetails memberDetails) {
+        memberService.deleteMember(memberDetails.getId());
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .build();
+    }
+
 }

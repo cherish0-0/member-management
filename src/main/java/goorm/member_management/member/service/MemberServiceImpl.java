@@ -11,6 +11,7 @@ import goorm.member_management.member.dto.request.MemberUpdateRequest;
 import goorm.member_management.member.dto.response.MemberResponse;
 import goorm.member_management.member.dto.response.PageResponse;
 import goorm.member_management.member.entity.Member;
+import goorm.member_management.member.entity.RoleType;
 import goorm.member_management.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -41,6 +42,19 @@ public class MemberServiceImpl implements MemberService {
         member.update(request.name(), request.email());
 
         return new MemberResponse(member.getId(), member.getName(), member.getEmail(), member.getRole());
+    }
+
+    @Transactional
+    @Override
+    public void deleteMember(Long id) {
+        Member member = memberRepository.findById(id)
+            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        if (member.getRole().equals(RoleType.ADMIN)) {
+            throw new CustomException(ErrorCode.ADMIN_CANNOT_DELETE);
+        }
+
+        memberRepository.delete(member);
     }
 
 }

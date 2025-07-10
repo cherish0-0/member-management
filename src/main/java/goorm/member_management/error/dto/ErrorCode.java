@@ -24,6 +24,7 @@ public enum ErrorCode {
 
     // 회원 관련 에러
     MEMBER_NOT_FOUND("존재하지 않는 회원입니다.", HttpStatus.NOT_FOUND),
+    ADMIN_CANNOT_DELETE("관리자는 삭제할 수 없습니다.", HttpStatus.BAD_REQUEST),
 
     // 토큰 관련 에러
     TOKEN_IS_EMPTY("토큰이 비어있습니다.", HttpStatus.UNAUTHORIZED),

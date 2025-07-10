@@ -28,30 +28,14 @@ public class AuthService {
      * email 중복 체크 후, 비밀번호 암호화하여 저장
      */
     @Transactional
-    public void signUp(MemberSignUpRequest request) {
+    public void signUp(MemberSignUpRequest request, RoleType role) {
         if (memberRepository.existsByEmail(request.email())) {
             throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
         }
 
         final String encodedPassword = passwordEncoder.encode(request.password());
 
-        memberRepository.save(new Member(request.name(), request.email(), encodedPassword, RoleType.USER));
-    }
-
-    /**
-     * 관리자 회원 가입
-     * email 중복 체크 후, 비밀번호 암호화하여 저장
-     * 역할은 ADMIN으로 설정
-     */
-    @Transactional
-    public void adminSignUp(MemberSignUpRequest request) {
-        if (memberRepository.existsByEmail(request.email())) {
-            throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
-        }
-
-        final String encodedPassword = passwordEncoder.encode(request.password());
-
-        memberRepository.save(new Member(request.name(), request.email(), encodedPassword, RoleType.ADMIN));
+        memberRepository.save(new Member(request.name(), request.email(), encodedPassword, role));
     }
 
     /**

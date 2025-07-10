@@ -61,6 +61,15 @@ public class Member {
         this.role = role;
     }
 
+    public void update(String name, String email) {
+        if (name != null) {
+            this.name = name;
+        }
+        if (email != null) {
+            this.email = email;
+        }
+    }
+
     public Long getId() {
         return id;
     }

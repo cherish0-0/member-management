@@ -9,7 +9,16 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/auth/sign-in
+POST http://localhost:8080/api/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "admin@gmail.com",
+  "password": "admin1234!@#$"
+}
+
+###
+POST http://localhost:8080/api/auth/sign-in
 Content-Type: application/json
 
 {
@@ -18,12 +27,12 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/auth/refresh
+POST http://localhost:8080/api/auth/refresh
 Content-Type: application/json
 Set-Cookie: refreshToken=eyJhbGciOiJIUzUxMiJ9.eyJhdWQiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3NTIwNzY0MjgsImV4cCI6MTc1NDY2ODQyOH0.BaNeZY_biHGYeg801X-UI38uRjh5ZhjMMQUnr4GkdbbBuJxG69Lxk3R_LL61YwrA20uwtpar55on4Qdlf-xuUg; Path=/; Max-Age=2592000; Expires=Fri, 08 Aug 2025 15:53:48 GMT; Secure; HttpOnly; SameSite=Lax
 
 ###
-POST http://localhost:8080/auth/admin/sign-up
+POST http://localhost:8080/api/auth/admin/sign-up
 Content-Type: application/json
 
 {
@@ -34,3 +43,14 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8080/api/members?page=0&size=20
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdWQiOiJ1c2VyQGdtYWlsLmNvbSIsImlhdCI6MTc1MjE1ODU1NSwiZXhwIjoxNzUyMTYyMTU1LCJyb2xlIjoiVVNFUiJ9.6-dGelgN4tehHDOeuwAS3yjxeIfTdS32Np94-_mfY8VQeHcbgffHVUpj6JhAhSw1DlivMX9U98RuCTc8vO9DAg
+
+###
+PATCH http://localhost:8080/api/members/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdWQiOiJ1c2VyQGdtYWlsLmNvbSIsImlhdCI6MTc1MjE1ODU1NSwiZXhwIjoxNzUyMTYyMTU1LCJyb2xlIjoiVVNFUiJ9.6-dGelgN4tehHDOeuwAS3yjxeIfTdS32Np94-_mfY8VQeHcbgffHVUpj6JhAhSw1DlivMX9U98RuCTc8vO9DAg
+
+{
+  "name": "updated user",
+  "email": ""
+}

@@ -22,6 +22,9 @@ public enum ErrorCode {
     // 권한 관련 에러
     AUTHORIZATION_DENIED("접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
 
+    // 회원 관련 에러
+    MEMBER_NOT_FOUND("존재하지 않는 회원입니다.", HttpStatus.NOT_FOUND),
+
     // 토큰 관련 에러
     TOKEN_IS_EMPTY("토큰이 비어있습니다.", HttpStatus.UNAUTHORIZED),
     TOKEN_INVALID("유효하지 않은 토큰입니다.", HttpStatus.UNAUTHORIZED),

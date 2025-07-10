@@ -2,6 +2,7 @@ package goorm.member_management.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,6 +23,12 @@ import lombok.RequiredArgsConstructor;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    private static final String[] POST_PERMIT_ALL = {
+        "/api/auth/sign-in",
+        "/api/auth/sign-up",
+        "/api/auth/sign-up/admin"
+    };
+
     private final JwtFilter jwtFilter;
 
     @Bean
@@ -35,7 +42,8 @@ public class SecurityConfig {
                 sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()
+                .requestMatchers(HttpMethod.POST, POST_PERMIT_ALL).permitAll()
+                .anyRequest().authenticated()
             )
             .build();
     }

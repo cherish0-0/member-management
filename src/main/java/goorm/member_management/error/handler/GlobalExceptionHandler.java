@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -27,6 +28,19 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
             .status(ex.getErrorCode().getStatus())
+            .body(new ErrorResponse(errors));
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
+        final List<String> errors = new ArrayList<>();
+
+        errors.add(ErrorCode.AUTHORIZATION_DENIED.getMessage());
+
+        log.error("Authorization Denied: {}", ex.getMessage());
+
+        return ResponseEntity
+            .status(ErrorCode.AUTHORIZATION_DENIED.getStatus())
             .body(new ErrorResponse(errors));
     }
 

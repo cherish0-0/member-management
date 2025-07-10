@@ -1,3 +1,7 @@
+logging:
+  level:
+    org.hibernate.orm.jdbc.bind: trace
+
 spring:
   autoconfigure:
     # Disable the UserDetailsServiceAutoConfiguration to prevent Spring Boot from auto-configuring a default UserDetailsService
@@ -21,3 +25,9 @@ spring:
         show_sql: true
         use_sql_comments: true
         format_sql: true
+
+jwt:
+  accessTokenSecretKey: VGhpc0lzTXlKd3RTZWNyZXRLZXlUaGlzT25seUZvclRlc3RpbmdQdXJwb3Nlc0hvd011Y2hMb25nZXJEb0lOZWVkVG9Xcml0ZUFsbW9zdFRoZXJlSWRvbnRIYXZlQW55dGhpbmdNb3JlVG9TYXk=
+  refreshTokenSecretKey: VGhpc0lzTXlSZWZyZXNoVG9rZW5TZWNyZXRLZXlUaGlzT25seUZvclRlc3RpbmdQdXJwb3Nlc0hvd011Y2hMb25nZXJEb0lOZWVkVG9Xcml0ZUFsbW9zdFRoZXJlSWRvbnRIYXZlQW55dGhpbmdNb3JlVG9TYXk=
+  accessTokenExpiration: 1h # 1 hour in seconds
+  refreshTokenExpiration: 30d # 30 days in seconds

@@ -13,6 +13,7 @@ import goorm.member_management.member.entity.Member;
 import goorm.member_management.member.entity.RoleType;
 import goorm.member_management.member.repository.MemberRepository;
 import goorm.member_management.security.JwtProvider;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -52,6 +53,21 @@ public class AuthService {
         member.setRefreshToken(tokens.refreshToken());
 
         return new MemberInfo(member.getEmail(), member.getRole(), tokens);
+    }
+
+    /**
+     * 로그아웃
+     * refreshToken은 null로 설정하여 갱신 방지
+     */
+    @Transactional
+    public void signOut(String accessToken) {
+        String accessTokenWithoutBearer = accessToken.substring(7);
+        Claims claims = jwtProvider.validateToken(accessTokenWithoutBearer, false);
+
+        String email = claims.getAudience();
+        final Member member = memberRepository.findByEmail(email)
+            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        member.setRefreshToken(null);
     }
 
     /**

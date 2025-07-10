@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,6 +47,16 @@ public class AuthController {
             .status(HttpStatus.OK)
             .header(HttpHeaders.SET_COOKIE, cookie.toString())
             .body(new MemberSignInResponse(tokens.accessToken()));
+    }
+
+    @PostMapping("/sign-out")
+    public ResponseEntity<Void> signOut(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken) {
+        authService.signOut(accessToken);
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .header(HttpHeaders.SET_COOKIE, createRefreshTokenCookie("").toString())
+            .build();
     }
 
     @PostMapping("/refresh")

@@ -1,8 +1,9 @@
 package goorm.member_management.error.dto;
 
+import org.springframework.http.HttpStatus;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
@@ -17,6 +18,9 @@ public enum ErrorCode {
     // 로그인 관련 에러
     NOT_FOUND_EMAIL("존재하지 않는 이메일입니다.", HttpStatus.NOT_FOUND),
     NOT_MATCHES_PASSWORD("비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED),
+
+    // 회원 정보 관련 에러
+    MEMBER_NOT_FOUND("회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
     // 토큰 관련 에러
     TOKEN_IS_EMPTY("토큰이 비어있습니다.", HttpStatus.UNAUTHORIZED),

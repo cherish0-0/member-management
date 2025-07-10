@@ -36,6 +36,12 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @PostMapping("/admin/sign-up")
+    public ResponseEntity<Void> adminSignUp(@Valid @RequestBody MemberSignUpRequest request) {
+        authService.adminSignUp(request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
     @PostMapping("/sign-in")
     public ResponseEntity<MemberSignInResponse> signIn(@Valid @RequestBody MemberSignInRequest request) {
         final MemberInfo memberInfo = authService.signIn(request.email(), request.password());

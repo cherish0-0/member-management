@@ -39,6 +39,22 @@ public class AuthService {
     }
 
     /**
+     * 관리자 회원 가입
+     * email 중복 체크 후, 비밀번호 암호화하여 저장
+     * 역할은 ADMIN으로 설정
+     */
+    @Transactional
+    public void adminSignUp(MemberSignUpRequest request) {
+        if (memberRepository.existsByEmail(request.email())) {
+            throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
+        }
+
+        final String encodedPassword = passwordEncoder.encode(request.password());
+
+        memberRepository.save(new Member(request.name(), request.email(), encodedPassword, RoleType.ADMIN));
+    }
+
+    /**
      * 로그인
      * email 로 회원 조회 후, 비밀번호 검증
      * 토큰 생성 후, refreshToken 저장

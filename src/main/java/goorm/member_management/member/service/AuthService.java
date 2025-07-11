@@ -1,6 +1,5 @@
 package goorm.member_management.member.service;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,11 +60,7 @@ public class AuthService {
      * refreshToken은 null로 설정하여 갱신 방지
      */
     @Transactional
-    public void signOut(@AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails == null) {
-            throw new CustomException(ErrorCode.TOKEN_INVALID);
-        }
-
+    public void signOut(MemberDetails memberDetails) {
         String email = memberDetails.getEmail();
 
         final Member member = memberRepository.findByEmail(email)

@@ -50,20 +50,23 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(id)
             .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
+        Long deleteMemberId = member.getId();
+        RoleType deleteMemberRole = member.getRole();
+
         // 어드민이 자신이 아닌 다른 어드민 계정을 지우려고 할 때 예외 처리
-        if (isDeletingAdmin(member) && isNotMine(id, member)) {
+        if (isDeletingAdmin(deleteMemberRole) && isNotMine(id, deleteMemberId)) {
             throw new CustomException(ErrorCode.ADMIN_CANNOT_DELETE);
         }
 
         memberRepository.delete(member);
     }
 
-    private static boolean isNotMine(Long id, Member member) {
-        return !member.getId().equals(id);
+    private static boolean isNotMine(Long id, Long deleteMemberId) {
+        return !deleteMemberId.equals(id);
     }
 
-    private static boolean isDeletingAdmin(Member member) {
-        return member.getRole() == (RoleType.ADMIN);
+    private static boolean isDeletingAdmin(RoleType deleteMemberRole) {
+        return deleteMemberRole == (RoleType.ADMIN);
     }
 
 }

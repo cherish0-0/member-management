@@ -32,6 +32,11 @@ Content-Type: application/json
 Set-Cookie: refreshToken=eyJhbGciOiJIUzUxMiJ9.eyJhdWQiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3NTIwNzY0MjgsImV4cCI6MTc1NDY2ODQyOH0.BaNeZY_biHGYeg801X-UI38uRjh5ZhjMMQUnr4GkdbbBuJxG69Lxk3R_LL61YwrA20uwtpar55on4Qdlf-xuUg; Path=/; Max-Age=2592000; Expires=Fri, 08 Aug 2025 15:53:48 GMT; Secure; HttpOnly; SameSite=Lax
 
 ###
+POST http://localhost:8080/api/auth/sign-out
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdWQiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3NTIyMDk5MzUsImV4cCI6MTc1MjIwOTk2NSwicm9sZSI6IlVTRVIifQ.lkrkEFE5MN9JLY1IGzdwq5j0wWY4w_EsSzR11eqUW4dlJ1CvgCx54viS9cdK_LGOB1ohrgXJObNxUgyY-EadMA
+
+###
 POST http://localhost:8080/api/auth/sign-up/admin
 Content-Type: application/json
 

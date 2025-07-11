@@ -55,6 +55,17 @@ public class AuthService {
     }
 
     /**
+     * 로그아웃
+     * refreshToken은 null로 설정하여 갱신 방지
+     */
+    @Transactional
+    public void signOut(String email) {
+        final Member member = memberRepository.findByEmail(email)
+            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        member.setRefreshToken(null);
+    }
+
+    /**
      * 토큰 갱신
      * refreshToken 유효성 검사 후, 해당 회원 조회
      * 새로운 토큰 생성 후, refreshToken 업데이트

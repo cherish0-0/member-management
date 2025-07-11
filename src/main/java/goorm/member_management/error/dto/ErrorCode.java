@@ -19,6 +19,9 @@ public enum ErrorCode {
     NOT_FOUND_EMAIL("존재하지 않는 이메일입니다.", HttpStatus.NOT_FOUND),
     NOT_MATCHES_PASSWORD("비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED),
 
+    // 회원 정보 관련 에러
+    MEMBER_NOT_FOUND("회원을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+  
     // 권한 관련 에러
     AUTHORIZATION_DENIED("접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
 

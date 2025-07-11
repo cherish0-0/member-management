@@ -12,4 +12,6 @@ public interface MemberService {
 
     MemberResponse updateMember(Long id, MemberUpdateRequest request);
 
+    void deleteMember(Long id);
+
 }

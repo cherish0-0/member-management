@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.util.StringUtils;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -62,10 +63,10 @@ public class Member {
     }
 
     public void update(String name, String email) {
-        if (name != null) {
+        if (StringUtils.hasText(name)) {
             this.name = name;
         }
-        if (email != null) {
+        if (StringUtils.hasText(email)) {
             this.email = email;
         }
     }

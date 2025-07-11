@@ -57,6 +57,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private void handleValidToken(String token, Claims validationResult) {
         final var userDetails = new MemberDetails(
+            validationResult.get("id", Long.class),
             validationResult.getAudience(),
             token,
             validationResult.get("role", String.class).split(",")

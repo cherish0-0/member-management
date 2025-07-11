@@ -51,14 +51,14 @@ public class JwtProvider {
         this.refreshTokenExpiration = refreshTokenExpiration;
     }
 
-    public Tokens createTokens(String email, RoleType role) {
+    public Tokens createTokens(Long id, String email, RoleType role) {
         Date issuedAt = Date.from(Instant.now());
         Date accessTokenExpiration = Date.from(issuedAt.toInstant().plus(this.accessTokenExpiration));
         Date refreshTokenExpiration = Date.from(issuedAt.toInstant().plus(this.refreshTokenExpiration));
 
-        final String accessToken = createToken(email, role, issuedAt,
+        final String accessToken = createToken(id, email, role, issuedAt,
             accessTokenExpiration, this.accessTokenHashKey);
-        final String refreshToken = createToken(email, role, issuedAt,
+        final String refreshToken = createToken(id, email, role, issuedAt,
             refreshTokenExpiration, this.refreshTokenHashKey);
 
         return new Tokens(accessToken, refreshToken);
@@ -76,7 +76,9 @@ public class JwtProvider {
         }
     }
 
-    private String createToken(String email,
+    private String createToken(
+        Long id,
+        String email,
         RoleType role,
         Date issuedAt,
         Date expiration,
@@ -86,7 +88,7 @@ public class JwtProvider {
             .setAudience(email)
             .setIssuedAt(issuedAt)
             .setExpiration(expiration)
-            .addClaims(Map.of("role", role.name()))
+            .addClaims(Map.of("id", id, "role", role.name()))
             .compact();
     }
 

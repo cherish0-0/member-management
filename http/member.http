@@ -13,7 +13,7 @@ POST http://localhost:8080/api/auth/sign-in
 Content-Type: application/json
 
 {
-  "email": "admin@gmail.com",
+  "email": "admin@email.com",
   "password": "admin1234!@#$"
 }
 
@@ -22,8 +22,8 @@ POST http://localhost:8080/api/auth/sign-in
 Content-Type: application/json
 
 {
-  "email": "user@gmail.com",
-  "password": "user1234!@#$"
+  "email": "email@email.com",
+  "password": "asdf1234!@#$"
 }
 
 ###
@@ -59,3 +59,21 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdWQiOiJ1c2VyQGdtYWlsLmNvbSIsImlhd
   "name": "updated user",
   "email": ""
 }
+
+###
+PATCH http://localhost:8080/api/members/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdWQiOiJ1c2VyQGdtYWlsLmNvbSIsImlhdCI6MTc1MjE2MDkzNywiZXhwIjoxNzUyMTY0NTM3LCJyb2xlIjoiVVNFUiIsImlkIjoyfQ.tZYHJrb-ijjFT3az5dnJyGMmkZV0ou2nt0P0R28raXx4SduZniEHgc0jhNW6-QqyxAokzFUCrGtu2pxXX7y3oQ
+
+{
+  "name": "user",
+  "email": "user@email.com"
+}
+
+###
+DELETE http://localhost:8080/api/members/2
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdWQiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3NTIxODgxODgsImV4cCI6MTc1MjE5MTc4OCwicm9sZSI6IlVTRVIiLCJpZCI6M30.UXClN2uwhGjHswdlWwPndunHwWe6XHUTanCCEFB6voQ9d80aO5jfzvebCZNsIdsmrBBZ93aA0f5C93UqlVRiJQ
+
+###
+DELETE http://localhost:8080/api/members/me
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdWQiOiJhZG1pbkBlbWFpbC5jb20iLCJpYXQiOjE3NTIxODgzNTQsImV4cCI6MTc1MjE5MTk1NCwicm9sZSI6IkFETUlOIiwiaWQiOjF9.AB_l981uzaCr48Csmr8GmfOmOwO1NmOPdty8G2us9qnvtc7DxUhZ3mLrVknjurRFB3JAKgijHDpyvKPv9mVQyg

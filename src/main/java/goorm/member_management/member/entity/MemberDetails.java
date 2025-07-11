@@ -9,13 +9,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class MemberDetails implements UserDetails {
 
+    private final Long id;
     private final String email;
     private final String token;
     private final String[] roles;
 
-    public MemberDetails(String email,
+    public MemberDetails(
+        Long id,
+        String email,
         String token,
         String[] roles) {
+        this.id = id;
         this.email = email;
         this.token = token;
         this.roles = roles;
@@ -28,8 +32,14 @@ public class MemberDetails implements UserDetails {
             .toList();
     }
 
+
+    public Long getId() {
+        return id;
+    }
+
     public String getEmail() {
         return email;
+
     }
 
     @Override

@@ -48,7 +48,7 @@ public class AuthService {
     public MemberInfo signIn(String email, String password) {
         final Member member = findByEmail(email);
         checkPassword(password, member.getPassword());
-        final Tokens tokens = jwtProvider.createTokens(member.getEmail(), member.getRole());
+        final Tokens tokens = jwtProvider.createTokens(member.getId(), member.getEmail(), member.getRole());
         member.setRefreshToken(tokens.refreshToken());
 
         return new MemberInfo(member.getEmail(), member.getRole(), tokens);
@@ -77,7 +77,7 @@ public class AuthService {
         Member member = memberRepository.findByRefreshToken(refreshToken)
             .orElseThrow(() -> new CustomException(ErrorCode.TOKEN_INVALID));
 
-        final Tokens tokens = jwtProvider.createTokens(member.getEmail(), member.getRole());
+        final Tokens tokens = jwtProvider.createTokens(member.getId(), member.getEmail(), member.getRole());
         member.setRefreshToken(tokens.refreshToken());
 
         return tokens;

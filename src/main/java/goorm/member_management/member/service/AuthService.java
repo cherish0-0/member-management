@@ -10,7 +10,6 @@ import goorm.member_management.member.dto.MemberInfo;
 import goorm.member_management.member.dto.Tokens;
 import goorm.member_management.member.dto.request.MemberSignUpRequest;
 import goorm.member_management.member.entity.Member;
-import goorm.member_management.member.entity.MemberDetails;
 import goorm.member_management.member.entity.RoleType;
 import goorm.member_management.member.repository.MemberRepository;
 import goorm.member_management.security.JwtProvider;
@@ -60,9 +59,7 @@ public class AuthService {
      * refreshToken은 null로 설정하여 갱신 방지
      */
     @Transactional
-    public void signOut(MemberDetails memberDetails) {
-        String email = memberDetails.getEmail();
-
+    public void signOut(String email) {
         final Member member = memberRepository.findByEmail(email)
             .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         member.setRefreshToken(null);

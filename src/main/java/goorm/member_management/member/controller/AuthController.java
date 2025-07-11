@@ -52,7 +52,8 @@ public class AuthController {
 
     @PostMapping("/sign-out")
     public ResponseEntity<Void> signOut(@AuthenticationPrincipal MemberDetails memberDetails) {
-        authService.signOut(memberDetails);
+        final String email = memberDetails.getEmail();
+        authService.signOut(email);
 
         return ResponseEntity
             .status(HttpStatus.OK)

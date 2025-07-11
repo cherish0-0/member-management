@@ -50,7 +50,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(id)
             .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        if (member.getRole().equals(RoleType.ADMIN)) {
+        if (member.getRole().equals(RoleType.ADMIN) && !member.getId().equals(id)) {
             throw new CustomException(ErrorCode.ADMIN_CANNOT_DELETE);
         }
 

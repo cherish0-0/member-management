@@ -13,8 +13,17 @@ POST http://localhost:8080/api/auth/sign-in
 Content-Type: application/json
 
 {
-  "email": "email@email.com",
-  "password": "asdf1234!@#$"
+  "email": "admin@gmail.com",
+  "password": "admin1234!@#$"
+}
+
+###
+POST http://localhost:8080/api/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "user@gmail.com",
+  "password": "user1234!@#$"
 }
 
 ###
@@ -26,3 +35,27 @@ Set-Cookie: refreshToken=eyJhbGciOiJIUzUxMiJ9.eyJhdWQiOiJlbWFpbEBlbWFpbC5jb20iLC
 POST http://localhost:8080/api/auth/sign-out
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdWQiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3NTIyMDk5MzUsImV4cCI6MTc1MjIwOTk2NSwicm9sZSI6IlVTRVIifQ.lkrkEFE5MN9JLY1IGzdwq5j0wWY4w_EsSzR11eqUW4dlJ1CvgCx54viS9cdK_LGOB1ohrgXJObNxUgyY-EadMA
+
+###
+POST http://localhost:8080/api/auth/sign-up/admin
+Content-Type: application/json
+
+{
+  "name": "admin",
+  "email": "admin@gmail.com",
+  "password": "admin1234!@#$"
+}
+
+###
+GET http://localhost:8080/api/members?page=0&size=20
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdWQiOiJ1c2VyQGdtYWlsLmNvbSIsImlhdCI6MTc1MjE1ODU1NSwiZXhwIjoxNzUyMTYyMTU1LCJyb2xlIjoiVVNFUiJ9.6-dGelgN4tehHDOeuwAS3yjxeIfTdS32Np94-_mfY8VQeHcbgffHVUpj6JhAhSw1DlivMX9U98RuCTc8vO9DAg
+
+###
+PATCH http://localhost:8080/api/members/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdWQiOiJ1c2VyQGdtYWlsLmNvbSIsImlhdCI6MTc1MjE1ODU1NSwiZXhwIjoxNzUyMTYyMTU1LCJyb2xlIjoiVVNFUiJ9.6-dGelgN4tehHDOeuwAS3yjxeIfTdS32Np94-_mfY8VQeHcbgffHVUpj6JhAhSw1DlivMX9U98RuCTc8vO9DAg
+
+{
+  "name": "updated user",
+  "email": ""
+}

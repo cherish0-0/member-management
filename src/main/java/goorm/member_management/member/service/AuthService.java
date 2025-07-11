@@ -28,14 +28,14 @@ public class AuthService {
      * email 중복 체크 후, 비밀번호 암호화하여 저장
      */
     @Transactional
-    public void signUp(MemberSignUpRequest request) {
+    public void signUp(MemberSignUpRequest request, RoleType role) {
         if (memberRepository.existsByEmail(request.email())) {
             throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
         }
 
         final String encodedPassword = passwordEncoder.encode(request.password());
 
-        memberRepository.save(new Member(request.name(), request.email(), encodedPassword, RoleType.USER));
+        memberRepository.save(new Member(request.name(), request.email(), encodedPassword, role));
     }
 
     /**

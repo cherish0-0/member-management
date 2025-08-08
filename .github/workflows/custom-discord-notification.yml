@@ -31,6 +31,7 @@ jobs:
         run: |
           
           payload=$(jq -n \
+            --arg repository_name "${{ github.repository }}" \
             --arg title "${{ github.event.pull_request.title }}" \
             --arg url "${{ github.event.pull_request.html_url }}" \
             '{
@@ -60,6 +61,7 @@ jobs:
           fi
           
           payload=$(jq -n \
+            --arg repository_name "${{ github.repository }}" \
             --arg title "${{ github.event.pull_request.title }}" \
             --arg url "${{ github.event.pull_request.html_url }}" \
             --arg changes "$change_msg" \
@@ -90,6 +92,7 @@ jobs:
           fi
           
           payload=$(jq -n \
+            --arg repository_name "${{ github.repository }}" \
             --arg title "${{ github.event.pull_request.title }}" \
             --arg url "${{ github.event.pull_request.html_url }}" \
             --arg base_branch "${{ github.event.pull_request.base.ref }}" \
@@ -126,6 +129,7 @@ jobs:
           DISCORD_WEBHOOK_URL: https://discord.com/api/webhooks/1403287687846428744/xmFCEt4_scWBvcvWgmTY6HmxBp8Sh_jEp6twaOck2vPeRMEqEPXgMQWM3vVYFwtn9PS_
         run: |
           payload=$(jq -n \
+            --arg repository_name "${{ github.repository }}" \
             --arg branch "${{ github.ref }}" \
             --arg commit "${{ github.head_commit.message }}" \
             --arg commit_url "${{ github.head_commit.url }}" \

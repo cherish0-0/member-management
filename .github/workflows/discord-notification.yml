@@ -1,0 +1,23 @@
+name: Discord Notifications
+
+on:
+  pull_request: # pr - opened, synchronize, reopened, closed 이벤트 발생 시 discord 알림
+    types: [ opened, closed ]
+  issues: # issues - opened, closed 이벤트 발생 시 discord 알림
+    types: [ opened, closed ]
+  push: # push - main, develop 브랜치에 push 이벤트 발생 시 discord 알림
+    branches:
+      - main
+      - develop
+
+jobs:
+  discordNotification:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Discord Github Notification
+        uses: Aleph-Kim/discord-github-notification@v1.2.0
+        with:
+          discord-webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }} # secret key에 저장한 discord webhook url
+          language: "english" # 필수 X
+          custom: true # 필수 X

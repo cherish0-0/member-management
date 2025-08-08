@@ -23,8 +23,8 @@ jobs:
         run: |
           
           MESSAGE="**PR opened at ${{ github.event.repository.name }}**
-          branch: ${{ github.event.pull_request.head.ref }}"
-          [link](${{ github.event.pull_request.html_url }})
+          branch: ${{ github.event.pull_request.head.ref }}
+          [link](${{ github.event.pull_request.html_url }})"
           
           payload=$(jq -n \
             --arg content "$MESSAGE" \
@@ -42,8 +42,8 @@ jobs:
         run: |
           
           MESSAGE="**PR closed at ${{ github.event.repository.name }}**
-          ${{ github.event.pull_request.base.ref }} <- ${{ github.event.pull_request.head.ref }}"
-          [link](${{ github.event.pull_request.html_url }})
+          ${{ github.event.pull_request.base.ref }} <- ${{ github.event.pull_request.head.ref }}
+          [link](${{ github.event.pull_request.html_url }})"
           
           payload=$(jq -n \
             --arg content "$MESSAGE" \
@@ -61,8 +61,8 @@ jobs:
         run: |
           
           MESSAGE="**PR merged at ${{ github.event.repository.name }}**
-          ${{ github.event.pull_request.base.ref }} <- ${{ github.event.pull_request.head.ref }}"
-          [link](${{ github.event.pull_request.html_url }})
+          ${{ github.event.pull_request.base.ref }} <- ${{ github.event.pull_request.head.ref }}
+          [link](${{ github.event.pull_request.html_url }})"
           
           payload=$(jq -n \
             --arg content "$MESSAGE" \
@@ -84,8 +84,8 @@ jobs:
         run: |
           
           MESSAGE="**Commit pushed at ${{ github.event.repository.name }}**
-          branch: ${{ github.ref_name }}"
-          [link](${{ github.head_commit.url }})
+          branch: ${{ github.ref_name }}
+          [link](${{ github.head_commit.url }})"
           
           payload=$(jq -n \
             --arg content "$MESSAGE" \

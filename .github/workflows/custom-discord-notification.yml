@@ -91,10 +91,10 @@ jobs:
             change_msg="${{github.event.pull_request.changed_files}} files changed."
           fi
           
-          MESSAGE="**PR Merged at ${{ github.event.repository.name }}**\n
-          **PR Title-** ${{ github.event.pull_request.title }}\n
-          **Base Branch-** ${{ github.event.pull_request.base.ref }}\n
-          **Changes-** $change_msg\n
+          MESSAGE="**PR Merged at ${{ github.event.repository.name }}**
+          **PR Title-** ${{ github.event.pull_request.title }}
+          **Base Branch-** ${{ github.event.pull_request.base.ref }}
+          **Changes-** $change_msg
           [PR link](${{ github.event.pull_request.html_url }})"
           
           payload=$(jq -n \
@@ -109,7 +109,7 @@ jobs:
                 "$DISCORD_WEBHOOK_URL"
 
   handle_push_events:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && !contains(github.event.head_commit.message, 'Merge pull request')
     runs-on: ubuntu-latest
 
     steps:

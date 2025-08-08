@@ -3,12 +3,6 @@ name: Custom Discord Notifications
 on:
   pull_request: # pr - opened, closed 이벤트 발생 시 discord 알림
     types: [ opened, closed ]
-  issues: # issues - opened, closed 이벤트 발생 시 discord 알림
-    types: [ opened, closed ]
-  push: # push - main, develop 브랜치에 push 이벤트 발생 시 discord 알림
-    branches:
-      - main
-      - develop
 
 jobs:
   handle_pr_events:
@@ -22,8 +16,8 @@ jobs:
         if: github.event.action == 'opened'
         run: |
           
-          MESSAGE="**[PR opened at ${{ github.event.repository.name }}](${{ github.event.pull_request.html_url }})**
-          `${{ github.event.pull_request.head.ref }}`"
+          MESSAGE="[${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }}) **PR opened at ${{ github.event.repository.name }}**
+          \`${{ github.event.pull_request.head.ref }}\`"
           
           payload=$(jq -n \
             --arg content "$MESSAGE" \
@@ -40,8 +34,8 @@ jobs:
         if: github.event.action == 'closed' && github.event.pull_request.merged == false
         run: |
           
-          MESSAGE="**[PR closed at ${{ github.event.repository.name }}](${{ github.event.pull_request.html_url }})**
-          `${{ github.event.pull_request.base.ref }}` ← `${{ github.event.pull_request.head.ref }}`"
+          MESSAGE="[${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }}) **PR closed at ${{ github.event.repository.name }}**
+          \`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`"
           
           payload=$(jq -n \
             --arg content "$MESSAGE" \
@@ -58,30 +52,8 @@ jobs:
         if: github.event.action == 'closed' && github.event.pull_request.merged == true
         run: |
           
-          MESSAGE="**[PR merged at ${{ github.event.repository.name }}](${{ github.event.pull_request.html_url }})**
-          `${{ github.event.pull_request.base.ref }}` ← `${{ github.event.pull_request.head.ref }}`"
-          
-          payload=$(jq -n \
-            --arg content "$MESSAGE" \
-            '{
-                "content": $content
-            }')
-          
-            curl -H "Content-Type: application/json" \
-                -X POST \
-                -d "$payload" \
-                "$DISCORD_WEBHOOK_URL"
-
-  handle_push_events:
-    if: github.event_name == 'push' && !contains(github.event.head_commit.message, 'Merge pull request')
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Push Notification
-        run: |
-          
-          MESSAGE="**[Commit pushed at ${{ github.event.repository.name }}](${{ github.head_commit.url }})**
-          `${{ github.ref_name }}`"
+          MESSAGE="[${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }}) **PR merged at ${{ github.event.repository.name }}**
+          \`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`"
           
           payload=$(jq -n \
             --arg content "$MESSAGE" \

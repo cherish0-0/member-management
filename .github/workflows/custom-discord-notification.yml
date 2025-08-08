@@ -52,12 +52,12 @@ jobs:
       - name: PR closed
         env:
           DISCORD_WEBHOOK_URL: https://discord.com/api/webhooks/1403287687846428744/xmFCEt4_scWBvcvWgmTY6HmxBp8Sh_jEp6twaOck2vPeRMEqEPXgMQWM3vVYFwtn9PS_
-        if: github.event.action == 'closed'
+        if: github.event.action == 'closed' && github.event.pull_request.merged == false
         run: |
           if [[ "${{github.event.pull_request.changed_files}}" -eq 0 ]]; then
             change_msg="No files changed."
           else 
-            change_msg="${{github.event.pull_request.changed_files}} files changed."}}
+            change_msg="${{github.event.pull_request.changed_files}} files changed."
           fi
           
           payload=$(jq -n \
@@ -83,12 +83,12 @@ jobs:
       - name: PR merged
         env:
           DISCORD_WEBHOOK_URL: https://discord.com/api/webhooks/1403287687846428744/xmFCEt4_scWBvcvWgmTY6HmxBp8Sh_jEp6twaOck2vPeRMEqEPXgMQWM3vVYFwtn9PS_
-        if: github.event.action == 'merged'
+        if: github.event.action == 'closed' && github.event.pull_request.merged == true
         run: |
           if [[ "${{github.event.pull_request.changed_files}}" -eq 0 ]]; then
             change_msg="No files changed."
           else 
-            change_msg="\($github.event.pull_request.changed_files) files changed."}}
+            change_msg="${{github.event.pull_request.changed_files}} files changed."
           fi
           
           payload=$(jq -n \
@@ -130,7 +130,7 @@ jobs:
         run: |
           payload=$(jq -n \
             --arg repository_name "${{ github.event.repository.name }}" \
-            --arg branch "${{ github.ref }}" \
+            --arg branch "${{ github.ref_name }}" \
             --arg commit "${{ github.head_commit.message }}" \
             --arg commit_url "${{ github.head_commit.url }}" \
             '{
@@ -138,7 +138,7 @@ jobs:
                 {
                   "title": "Commit Pushed at \($repository_name)",
                   "description": "**Branch-** \($branch)\n**Commit Message-** \($commit)\n[Commit link](\($commit_url))",
-                  "color": 3066993452
+                  "color": 15844367
                 }
                 ]
             }')

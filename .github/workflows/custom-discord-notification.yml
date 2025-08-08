@@ -91,20 +91,16 @@ jobs:
             change_msg="${{github.event.pull_request.changed_files}} files changed."
           fi
           
+          MESSAGE="**PR Merged at ${{ github.event.repository.name }}**\n
+          **PR Title-** ${{ github.event.pull_request.title }}\n
+          **Base Branch-** ${{ github.event.pull_request.base.ref }}\n
+          **Changes-** $change_msg\n
+          [PR link](${{ github.event.pull_request.html_url }})"
+          
           payload=$(jq -n \
-            --arg repository_name "${{ github.event.repository.name }}" \
-            --arg title "${{ github.event.pull_request.title }}" \
-            --arg url "${{ github.event.pull_request.html_url }}" \
-            --arg base_branch "${{ github.event.pull_request.base.ref }}" \
-            --arg changes "$change_msg" \
+            --arg content "$MESSAGE" \
             '{
-              "embeds": [
-                {
-                  "title": "PR Merged at \($repository_name)",
-                  "description": "**Base Branch-** \($base_branch)\n**PR Title-** \($title)\n**Changes-** \($changes)\n[PR link](\($url))",
-                  "color": 3066993
-                }
-                ]
+                "content": $content
             }')
           
             curl -H "Content-Type: application/json" \

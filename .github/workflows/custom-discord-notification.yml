@@ -1,7 +1,7 @@
 name: Custom Discord Notifications
 
 on:
-  pull_request: # pr - opened, synchronize, reopened, closed 이벤트 발생 시 discord 알림
+  pull_request: # pr - opened, closed 이벤트 발생 시 discord 알림
     types: [ opened, closed ]
   issues: # issues - opened, closed 이벤트 발생 시 discord 알림
     types: [ opened, closed ]
@@ -14,34 +14,21 @@ jobs:
   handle_pr_events:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    env:
+      DISCORD_WEBHOOK_URL: https://discord.com/api/webhooks/1403287687846428744/xmFCEt4_scWBvcvWgmTY6HmxBp8Sh_jEp6twaOck2vPeRMEqEPXgMQWM3vVYFwtn9PS_
 
     steps:
-      - name: PR Info
-        run: |
-          echo "repository_name=${{ github.event.repository.name }}" >> $GITHUB_ENV
-          echo "pull_request_title=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
-          echo "pull_request_url=${{ github.event.pull_request.html_url }}" >> $GITHUB_ENV
-          echo "pull_request_author=${{ github.event.pull_request.user.login }}" >> $GITHUB_ENV
-          echo "pull_request_changed_files=${{ github.event.pull_request.changed_files }}" >> $GITHUB_ENV
-
       - name: PR opened
-        env:
-          DISCORD_WEBHOOK_URL: https://discord.com/api/webhooks/1403287687846428744/xmFCEt4_scWBvcvWgmTY6HmxBp8Sh_jEp6twaOck2vPeRMEqEPXgMQWM3vVYFwtn9PS_
         if: github.event.action == 'opened'
         run: |
           
+          MESSAGE="[**PR opened at ${{ github.event.repository.name }}](${{ github.event.pull_request.html_url }})**
+          branch: ${{ github.event.pull_request.head.ref }}"
+          
           payload=$(jq -n \
-            --arg repository_name "${{ github.event.repository.name }}" \
-            --arg title "${{ github.event.pull_request.title }}" \
-            --arg url "${{ github.event.pull_request.html_url }}" \
+            --arg content "$MESSAGE" \
             '{
-              "embeds": [
-                {
-                  "title": "New PR Opened at \($repository_name)",
-                  "description": "**PR Title-** \($title)\n[PR link](\($url))",
-                  "color": 3447003
-                }
-                ]
+                "content": $content
             }')
           
             curl -H "Content-Type: application/json" \
@@ -50,29 +37,16 @@ jobs:
                 "$DISCORD_WEBHOOK_URL"
 
       - name: PR closed
-        env:
-          DISCORD_WEBHOOK_URL: https://discord.com/api/webhooks/1403287687846428744/xmFCEt4_scWBvcvWgmTY6HmxBp8Sh_jEp6twaOck2vPeRMEqEPXgMQWM3vVYFwtn9PS_
         if: github.event.action == 'closed' && github.event.pull_request.merged == false
         run: |
-          if [[ "${{github.event.pull_request.changed_files}}" -eq 0 ]]; then
-            change_msg="No files changed."
-          else 
-            change_msg="${{github.event.pull_request.changed_files}} files changed."
-          fi
+          
+          MESSAGE="[**PR closed at ${{ github.event.repository.name }}](${{ github.event.pull_request.html_url }})**
+          ${{ github.event.pull_request.base.ref }} <- ${{ github.event.pull_request.head.ref }}"
           
           payload=$(jq -n \
-            --arg repository_name "${{ github.event.repository.name }}" \
-            --arg title "${{ github.event.pull_request.title }}" \
-            --arg url "${{ github.event.pull_request.html_url }}" \
-            --arg changes "$change_msg" \
+            --arg content "$MESSAGE" \
             '{
-              "embeds": [
-                {
-                  "title": "PR Closed at \($repository_name)",
-                  "description": "**PR Title-** \($title)\n**Changes-** \($changes)\n[PR link](\($url))",
-                  "color": 15158332
-                }
-                ]
+                "content": $content
             }')
           
             curl -H "Content-Type: application/json" \
@@ -81,21 +55,11 @@ jobs:
                 "$DISCORD_WEBHOOK_URL"
 
       - name: PR merged
-        env:
-          DISCORD_WEBHOOK_URL: https://discord.com/api/webhooks/1403287687846428744/xmFCEt4_scWBvcvWgmTY6HmxBp8Sh_jEp6twaOck2vPeRMEqEPXgMQWM3vVYFwtn9PS_
         if: github.event.action == 'closed' && github.event.pull_request.merged == true
         run: |
-          if [[ "${{github.event.pull_request.changed_files}}" -eq 0 ]]; then
-            change_msg="No files changed."
-          else 
-            change_msg="${{github.event.pull_request.changed_files}} files changed."
-          fi
           
-          MESSAGE="**PR Merged at ${{ github.event.repository.name }}**
-          **PR Title-** ${{ github.event.pull_request.title }}
-          **Base Branch-** ${{ github.event.pull_request.base.ref }}
-          **Changes-** $change_msg
-          [PR link](${{ github.event.pull_request.html_url }})"
+          MESSAGE="[**PR merged at ${{ github.event.repository.name }}](${{ github.event.pull_request.html_url }})**
+          ${{ github.event.pull_request.base.ref }} <- ${{ github.event.pull_request.head.ref }}"
           
           payload=$(jq -n \
             --arg content "$MESSAGE" \
@@ -113,30 +77,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Push Info
-        run: |
-          echo "repository_name=${{ github.event.repository.name }}" >> $GITHUB_ENV
-          echo "pushed_branch=${{ github.ref }}" >> $GITHUB_ENV
-          echo "pushed_commit=${{ github.head_commit.message }}" >> $GITHUB_ENV
-          echo "pushed_commit_url=${{ github.head_commit.url }}" >> $GITHUB_ENV
-
       - name: Push Notification
-        env:
-          DISCORD_WEBHOOK_URL: https://discord.com/api/webhooks/1403287687846428744/xmFCEt4_scWBvcvWgmTY6HmxBp8Sh_jEp6twaOck2vPeRMEqEPXgMQWM3vVYFwtn9PS_
         run: |
+          
+          MESSAGE="[**Commit pushed at ${{ github.event.repository.name }}](${{ github.head_commit.url }})**
+          branch: ${{ github.ref_name }}"
+          
           payload=$(jq -n \
-            --arg repository_name "${{ github.event.repository.name }}" \
-            --arg branch "${{ github.ref_name }}" \
-            --arg commit "${{ github.head_commit.message }}" \
-            --arg commit_url "${{ github.head_commit.url }}" \
+            --arg content "$MESSAGE" \
             '{
-              "embeds": [
-                {
-                  "title": "Commit Pushed at \($repository_name)",
-                  "description": "**Branch-** \($branch)\n**Commit Message-** \($commit)\n[Commit link](\($commit_url))",
-                  "color": 15844367
-                }
-                ]
+                "content": $content
             }')
           
             curl -H "Content-Type: application/json" \

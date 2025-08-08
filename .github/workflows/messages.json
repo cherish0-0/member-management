@@ -1,10 +1,10 @@
 {
   "english": {
-    "PR_OPENED": "**PR opened!**\ntitle: {title}\nby {user}\n\n[go to github]<{url}>",
-    "PR_CLOSED": "**PR closed!**\ntitle: {title}\nby {user}\n\n[go to github]<{url}>",
-    "PR_MERGED": "**PR merged!**\ntitle: {title}\nby {user}\n\n[go to github]<{url}>",
-    "ISSUE_OPENED": "**Issue opened!**\ntitle: {title}\nby {user}\n\n[go to github]<{url}>",
-    "ISSUE_CLOSED": "**Issue closed!**\ntitle: {title}\nby {user}\n\n[go to github]<{url}>",
-    "PUSH": "**Commit pushed!**\ntitle: {title}\nby {user}\n\n[go to github]<{url}>"
+    "PR_OPENED": "**PR opened!**\ntitle: {title}\nby {user}\n[go to github]({url})",
+    "PR_CLOSED": "**PR closed!**\ntitle: {title}\nby {user}\n[go to github]({url})",
+    "PR_MERGED": "**PR merged!**\ntitle: {title}\nby {user}\n[go to github]({url})",
+    "ISSUE_OPENED": "**Issue opened!**\ntitle: {title}\nby {user}\n[go to github]({url})",
+    "ISSUE_CLOSED": "**Issue closed!**\ntitle: {title}\nby {user}\n[go to github]({url})",
+    "PUSH": "**Commit pushed!**\ntitle: {title}\nby {user}\n[go to github]({url})"
   }
 }

@@ -1,4 +1,4 @@
-name: Custom Discord Notifications
+name: Discord Notifications
 
 on:
   pull_request: # pr - opened, closed 이벤트 발생 시 discord 알림
@@ -16,8 +16,12 @@ jobs:
         if: github.event.action == 'opened'
         run: |
           
-          MESSAGE="**PR opened at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
-          \`${{ github.event.pull_request.head.ref }}\`"
+          MESSAGE="
+          >**PR opened at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
+          >
+          >\`${{ github.event.pull_request.head.ref }}\`
+          
+          "
           
           payload=$(jq -n \
             --arg content "$MESSAGE" \
@@ -34,8 +38,12 @@ jobs:
         if: github.event.action == 'closed' && github.event.pull_request.merged == false
         run: |
           
-          MESSAGE="**PR closed at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
-          \`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`"
+          MESSAGE="
+          >**PR closed at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
+          >
+          >\`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`
+          
+          "
           
           payload=$(jq -n \
             --arg content "$MESSAGE" \
@@ -52,8 +60,12 @@ jobs:
         if: github.event.action == 'closed' && github.event.pull_request.merged == true
         run: |
           
-          MESSAGE="**PR merged at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
-          \`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`\n"
+          MESSAGE="
+          >**PR merged at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
+          >
+          >\`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`
+          
+          "
           
           payload=$(jq -n \
             --arg content "$MESSAGE" \

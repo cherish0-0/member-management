@@ -133,7 +133,7 @@ jobs:
               "embeds": [
                 {
                   "title": "Commit Pushed at \($repository_name)",
-                  "description": "**Branch-** \($branch)\n**Commit Message-** \($commit)\n[Commit link](\$commit_url)",
+                  "description": "**Branch-** \($branch)\n**Commit Message-** \($commit)\n[Commit link]\($commit_url)",
                   "color": 3066993452
                 }
                 ]

@@ -22,8 +22,9 @@ jobs:
         if: github.event.action == 'opened'
         run: |
           
-          MESSAGE="**[PR opened at ${{ github.event.repository.name }}]**(${{ github.event.pull_request.html_url }})
+          MESSAGE="**PR opened at ${{ github.event.repository.name }}**
           branch: ${{ github.event.pull_request.head.ref }}"
+          [link](${{ github.event.pull_request.html_url }})
           
           payload=$(jq -n \
             --arg content "$MESSAGE" \
@@ -40,8 +41,9 @@ jobs:
         if: github.event.action == 'closed' && github.event.pull_request.merged == false
         run: |
           
-          MESSAGE="**[PR closed at ${{ github.event.repository.name }}]**(${{ github.event.pull_request.html_url }})
+          MESSAGE="**PR closed at ${{ github.event.repository.name }}**
           ${{ github.event.pull_request.base.ref }} <- ${{ github.event.pull_request.head.ref }}"
+          [link](${{ github.event.pull_request.html_url }})
           
           payload=$(jq -n \
             --arg content "$MESSAGE" \
@@ -58,8 +60,9 @@ jobs:
         if: github.event.action == 'closed' && github.event.pull_request.merged == true
         run: |
           
-          MESSAGE="**[PR merged at ${{ github.event.repository.name }}]**(${{ github.event.pull_request.html_url }})
+          MESSAGE="**PR merged at ${{ github.event.repository.name }}**
           ${{ github.event.pull_request.base.ref }} <- ${{ github.event.pull_request.head.ref }}"
+          [link](${{ github.event.pull_request.html_url }})
           
           payload=$(jq -n \
             --arg content "$MESSAGE" \
@@ -80,8 +83,9 @@ jobs:
       - name: Push Notification
         run: |
           
-          MESSAGE="**[Commit pushed at ${{ github.event.repository.name }}]**(${{ github.head_commit.url }})
+          MESSAGE="**Commit pushed at ${{ github.event.repository.name }}**
           branch: ${{ github.ref_name }}"
+          [link](${{ github.head_commit.url }})
           
           payload=$(jq -n \
             --arg content "$MESSAGE" \

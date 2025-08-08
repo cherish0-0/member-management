@@ -16,7 +16,7 @@ jobs:
         if: github.event.action == 'opened'
         run: |
           
-          MESSAGE="[#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }}) **PR opened at ${{ github.event.repository.name }}**
+          MESSAGE="**PR opened at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
           \`${{ github.event.pull_request.head.ref }}\`"
           
           payload=$(jq -n \
@@ -34,7 +34,7 @@ jobs:
         if: github.event.action == 'closed' && github.event.pull_request.merged == false
         run: |
           
-          MESSAGE="[#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }}) **PR closed at ${{ github.event.repository.name }}**
+          MESSAGE="**PR closed at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
           \`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`"
           
           payload=$(jq -n \
@@ -52,7 +52,7 @@ jobs:
         if: github.event.action == 'closed' && github.event.pull_request.merged == true
         run: |
           
-          MESSAGE="[#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }}) **PR merged at ${{ github.event.repository.name }}**
+          MESSAGE="**PR merged at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
           \`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`"
           
           payload=$(jq -n \

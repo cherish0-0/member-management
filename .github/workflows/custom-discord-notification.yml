@@ -17,9 +17,9 @@ jobs:
         run: |
           
           MESSAGE="
-          >**PR opened at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
-          >
-          >\`${{ github.event.pull_request.head.ref }}\`
+          > **PR opened at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
+          > 
+          > \`${{ github.event.pull_request.head.ref }}\`
           
           "
           
@@ -39,9 +39,9 @@ jobs:
         run: |
           
           MESSAGE="
-          >**PR closed at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
-          >
-          >\`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`
+          > **PR closed at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
+          > 
+          > \`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`
           
           "
           
@@ -61,9 +61,9 @@ jobs:
         run: |
           
           MESSAGE="
-          >**PR merged at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
-          >
-          >\`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`
+          > **PR merged at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
+          > 
+          > \`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`
           
           "
           

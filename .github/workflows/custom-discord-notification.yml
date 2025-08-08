@@ -37,7 +37,7 @@ jobs:
               "embeds": [
                 {
                   "title": "New PR Opened at \($repository_name)",
-                  "description": "**PR Title-** \($title)\n[PR link](\$url)",
+                  "description": "**PR Title-** \($title)\n[PR link]\($url)",
                   "color": 3447003
                 }
                 ]
@@ -67,7 +67,7 @@ jobs:
               "embeds": [
                 {
                   "title": "PR Closed at \($repository_name)",
-                  "description": "**PR Title-** \($title)\n**Changes-** \($changes)\n[PR link](\$url)",
+                  "description": "**PR Title-** \($title)\n**Changes-** \($changes)\n[PR link]\($url)",
                   "color": 15158332
                 }
                 ]
@@ -98,7 +98,7 @@ jobs:
               "embeds": [
                 {
                   "title": "PR Merged at \($repository_name)",
-                  "description": "**Base Branch-** \($base_branch)\n**PR Title-** \($title)\n**Changes-** \($changes)\n[PR link](\$url)",
+                  "description": "**Base Branch-** \($base_branch)\n**PR Title-** \($title)\n**Changes-** \($changes)\n[PR link]\($url)",
                   "color": 3066993
                 }
                 ]
@@ -133,7 +133,7 @@ jobs:
               "embeds": [
                 {
                   "title": "Commit Pushed at \($repository_name)",
-                  "description": "**Branch-** \($branch)\n**Commit Message-** \($commit)\n[Commit link](\$commit_url)",
+                  "description": "**Branch-** \($branch)\n**Commit Message-** \($commit)\n[Commit link]\($commit_url)",
                   "color": 3066993452
                 }
                 ]

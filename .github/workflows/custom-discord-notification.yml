@@ -1,79 +1,79 @@
-name: Discord Notifications
-
-on:
-  pull_request: # pr - opened, closed 이벤트 발생 시 discord 알림
-    types: [ opened, closed ]
-
-jobs:
-  handle_pr_events:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    env:
-      DISCORD_WEBHOOK_URL: https://discord.com/api/webhooks/1403287687846428744/xmFCEt4_scWBvcvWgmTY6HmxBp8Sh_jEp6twaOck2vPeRMEqEPXgMQWM3vVYFwtn9PS_
-
-    steps:
-      - name: PR opened
-        if: github.event.action == 'opened'
-        run: |
-          
-          MESSAGE="
-          > **PR opened at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
-          > 
-          > \`${{ github.event.pull_request.head.ref }}\`
-          
-          "
-          
-          payload=$(jq -n \
-            --arg content "$MESSAGE" \
-            '{
-                "content": $content
-            }')
-          
-            curl -H "Content-Type: application/json" \
-                -X POST \
-                -d "$payload" \
-                "$DISCORD_WEBHOOK_URL"
-
-      - name: PR closed
-        if: github.event.action == 'closed' && github.event.pull_request.merged == false
-        run: |
-          
-          MESSAGE="
-          > **PR closed at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
-          > 
-          > \`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`
-          
-          "
-          
-          payload=$(jq -n \
-            --arg content "$MESSAGE" \
-            '{
-                "content": $content
-            }')
-          
-            curl -H "Content-Type: application/json" \
-                -X POST \
-                -d "$payload" \
-                "$DISCORD_WEBHOOK_URL"
-
-      - name: PR merged
-        if: github.event.action == 'closed' && github.event.pull_request.merged == true
-        run: |
-          
-          MESSAGE="
-          > **PR merged at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
-          > 
-          > \`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`
-          
-          "
-          
-          payload=$(jq -n \
-            --arg content "$MESSAGE" \
-            '{
-                "content": $content
-            }')
-          
-            curl -H "Content-Type: application/json" \
-                -X POST \
-                -d "$payload" \
-                "$DISCORD_WEBHOOK_URL"
+#name: Discord Notifications
+#
+#on:
+#  pull_request: # pr - opened, closed 이벤트 발생 시 discord 알림
+#    types: [ opened, closed ]
+#
+#jobs:
+#  handle_pr_events:
+#    if: github.event_name == 'pull_request'
+#    runs-on: ubuntu-latest
+#    env:
+#      DISCORD_WEBHOOK_URL: https://discord.com/api/webhooks/1403287687846428744/xmFCEt4_scWBvcvWgmTY6HmxBp8Sh_jEp6twaOck2vPeRMEqEPXgMQWM3vVYFwtn9PS_
+#
+#    steps:
+#      - name: PR opened
+#        if: github.event.action == 'opened'
+#        run: |
+#
+#          MESSAGE="
+#          > **PR opened at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
+#          >
+#          > \`${{ github.event.pull_request.head.ref }}\`
+#
+#          "
+#
+#          payload=$(jq -n \
+#            --arg content "$MESSAGE" \
+#            '{
+#                "content": $content
+#            }')
+#
+#            curl -H "Content-Type: application/json" \
+#                -X POST \
+#                -d "$payload" \
+#                "$DISCORD_WEBHOOK_URL"
+#
+#      - name: PR closed
+#        if: github.event.action == 'closed' && github.event.pull_request.merged == false
+#        run: |
+#
+#          MESSAGE="
+#          > **PR closed at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
+#          >
+#          > \`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`
+#
+#          "
+#
+#          payload=$(jq -n \
+#            --arg content "$MESSAGE" \
+#            '{
+#                "content": $content
+#            }')
+#
+#            curl -H "Content-Type: application/json" \
+#                -X POST \
+#                -d "$payload" \
+#                "$DISCORD_WEBHOOK_URL"
+#
+#      - name: PR merged
+#        if: github.event.action == 'closed' && github.event.pull_request.merged == true
+#        run: |
+#
+#          MESSAGE="
+#          > **PR merged at ${{ github.event.repository.name }}** [#${{github.event.pull_request.number}}](${{ github.event.pull_request.html_url }})
+#          >
+#          > \`${{ github.event.pull_request.base.ref }}\` ← \`${{ github.event.pull_request.head.ref }}\`
+#
+#          "
+#
+#          payload=$(jq -n \
+#            --arg content "$MESSAGE" \
+#            '{
+#                "content": $content
+#            }')
+#
+#            curl -H "Content-Type: application/json" \
+#                -X POST \
+#                -d "$payload" \
+#                "$DISCORD_WEBHOOK_URL"

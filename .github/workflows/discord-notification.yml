@@ -42,7 +42,7 @@ jobs:
       - name: Send Discord notification
         if: steps.setup.outputs.message != ''
         run: |
-          PAYLOAD="{\"content\": ${{ steps.setup.outputs.message }}}"
+          PAYLOAD=$(jq -n --arg content "$MESSAGE" '{"content": $content}')
           curl -H "Content-Type: application/json" \
             -X POST \
             -d "$PAYLOAD" \

@@ -1,0 +1,47 @@
+name: Debug Discord Notifications
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    env:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+    steps:
+      - name: Environment Check
+        run: |
+          echo "=== 환경 변수 체크 ==="
+          echo "DISCORD_WEBHOOK_URL 설정됨: $([[ -n $DISCORD_WEBHOOK_URL ]] && echo '✅' || echo '❌')"
+          echo "URL 길이: ${#DISCORD_WEBHOOK_URL}"
+          echo "URL 형식: ${DISCORD_WEBHOOK_URL:0:30}..."
+          
+      - name: Simple Test Message
+        run: |
+          echo "=== 간단한 테스트 메시지 ==="
+          
+          curl -v \
+            -H "Content-Type: application/json" \
+            -X POST \
+            -d '{"content": "🚨 **긴급 테스트**: 이 메시지가 보이나요?"}' \
+            "$DISCORD_WEBHOOK_URL"
+            
+      - name: Test with jq
+        run: |
+          echo "=== jq를 사용한 테스트 ==="
+          
+          MESSAGE="📋 **jq 테스트 메시지**
+          ⏰ 시간: $(date)
+          🔧 워크플로우: ${{ github.workflow }}"
+          
+          payload=$(jq -n --arg content "$MESSAGE" '{"content": $content}')
+          echo "생성된 payload:"
+          echo "$payload"
+          
+          curl -v \
+            -H "Content-Type: application/json" \
+            -X POST \
+            -d "$payload" \
+            "$DISCORD_WEBHOOK_URL"

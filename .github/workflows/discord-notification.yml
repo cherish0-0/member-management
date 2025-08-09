@@ -37,7 +37,9 @@ jobs:
           # multiline을 한줄로 escape
           # MESSAGE_ESCAPED=$(echo "$MESSAGE" | jq -Rs .)
 
-          echo "message=$MESSAGE" >> "$GITHUB_OUTPUT"
+          echo "message<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$MESSAGE" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: Send Discord notification
         if: steps.setup.outputs.message != ''

@@ -24,7 +24,7 @@ jobs:
 
           # 메시지 분기
           if [[ "$EVENT" == "opened" ]]; then
-            MESSAGE=$(echo -e "> **PR Opened in \`${REPO}\`** [#${NUMBER}](${URL})\n> \`${HEAD}\` → \`${BASE}\`")
+            MESSAGE=$(echo -e "> **PR Opened in \\\`${REPO}\\\`** [#${NUMBER}](${URL})\n> \\\`${HEAD}\\\` → \\\`${BASE}\\\`")
           elif [[ "$EVENT" == "closed" && "$MERGED" == "true" ]]; then
             MESSAGE=$(echo -e "> **PR Merged in \`${REPO}\`** [#${NUMBER}](${URL})\n> \`${HEAD}\` → \`${BASE}\`")
           elif [[ "$EVENT" == "closed" && "$MERGED" != "true" ]]; then

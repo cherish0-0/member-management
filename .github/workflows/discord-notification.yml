@@ -35,14 +35,14 @@ jobs:
           fi
 
           # multiline을 한줄로 escape
-          MESSAGE_ESCAPED=$(echo "$MESSAGE" | jq -Rs .)
+          # MESSAGE_ESCAPED=$(echo "$MESSAGE" | jq -Rs .)
 
-          echo "message=$MESSAGE_ESCAPED" >> "$GITHUB_OUTPUT"
+          echo "message=$MESSAGE" >> "$GITHUB_OUTPUT"
 
       - name: Send Discord notification
         if: steps.setup.outputs.message != ''
         run: |
-          PAYLOAD=$(jq -n --arg content "$MESSAGE" '{"content": $content}')
+          PAYLOAD=$(jq -n --arg content "${{ steps.setup.outputs.message }}" '{"content": $content}')
           curl -H "Content-Type: application/json" \
             -X POST \
             -d "$PAYLOAD" \
